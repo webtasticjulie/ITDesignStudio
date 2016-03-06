@@ -122,7 +122,7 @@ function check_exists($table, $field, $value){
 }
 //connects to database and returns link  
 function connect_db(){
-    $link = new mysqli('localhost', 'my_user', 'my*password', 'abeck');
+  //Removed Line from Code Insert Database Connection string here like so:    $link = new mysqli('localhost', 'user', 'password', 'databasename');
     if (!$link){
       echo "ERROR: Unable to connect to MySQL. ".PHP_EOL;
       echo "Debug".mysqli_connect_errno().PHP_EOL;
