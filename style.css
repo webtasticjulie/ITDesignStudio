@@ -1,0 +1,189 @@
+html{
+
+color: #333;
+font-weight: 400;
+font-family: "Montserrat",sans-serif;
+ 
+    padding: 1em;
+}
+
+body {
+
+  width: 85%;
+  padding: 3em;
+  border: 1px inset;
+  background-color: white;
+    margin-left: auto;
+    margin-right: auto;
+  
+
+}
+
+header{
+  /*width: 100%;
+  height: 15%;
+  margin-left: 1em;*/
+  margin-left:auto;
+    margin-right: auto;
+    text-align:left;
+    width: 80%;
+    height: 15%;
+}
+
+#logo{
+  width: 30%;
+
+}
+header img{
+    box-shadow: 0 0 8px 8px white inset;
+    border-radius: 5px;
+}
+
+#searchboxfield{
+  width: 30%;
+  float: right;
+  position: absolute;
+  top: 20%;
+  right: 0px;
+}
+#searchbox{
+
+  width: 30%;
+  float: right;
+  position: absolute;
+  top: 20%;
+  right: 0px;
+
+
+}
+label{
+font-weight: bold;
+}
+
+
+#searchboxfield input[type=submit]{
+  border-radius: 10px;
+  
+    
+}
+input[type=text]{
+
+border-radius:12px;
+width: 100%;
+}
+input[type=select]{
+    border-radius: 12px;
+}
+
+
+
+
+#magglass{
+  cursor: pointer;
+  height: 17px;
+  margin: 11px 0 0 0;
+  text-align: left;
+  width: 50px;
+  position: static;
+
+
+}
+
+#magglass img{
+  margin: 15px;
+  width: 20px;
+}
+
+nav{
+  width: 100%;
+  clear: all;
+  margin-left: -30px;
+}
+
+nav li{
+  display: block;
+  float: left;
+  width: 31%;
+  height: 3em;
+  text-decoration: none;
+
+  text-align: center;
+  vertical-align:middle;
+  font-weight: bold;
+}
+
+nav li a{ width: 100%;height: 100%; text-decoration:none; display: inline-block; }
+
+nav li a:hover{
+
+    background-color: #316B90;
+    color: white;
+    display: inline-block;
+}
+#maincontent{
+    
+    margin-left:auto;
+    margin-right: auto;
+    text-align:left;
+    width: 80%;
+    
+}
+#titlebar{
+    
+    width:100%;
+    margin-top: 2.1875em;
+
+}
+#titlebar h3{
+
+padding-top: 2.5em;
+}
+
+#titlebar hr{
+      width: 85%;
+      margin-left: 0px;
+      color: #333;
+
+
+}
+
+footer{
+  width: 100%;
+  position: absolute;
+  bottom: 0px;
+  margin-left: 0px;
+  text-align: center;
+}
+
+
+td{
+
+width: 7.5em;
+vertical-align: top;
+
+}
+.providerinfo{
+    display: block;
+    border: 1px solid black;
+    border-radius: .625em;
+    width: 100%;
+    background-color: F0F8FF;
+    margin-top: .625em;
+    padding: 1.25em;
+      -webkit-box-shadow: 3px 3px 5px 6px #ccc;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+  -moz-box-shadow:    3px 3px 5px 6px #ccc;  /* Firefox 3.5 - 3.6 */
+  box-shadow:         3px 3px 5px 6px #ccc;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+}
+
+@media only screen and (min-device-width: 768px) {
+  nav li{
+  display: block;
+
+  text-decoration: none;
+  
+  text-align: center;
+  vertical-align:middle;
+  font-weight: bold;
+  }  
+    
+}
