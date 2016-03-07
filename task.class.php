@@ -28,8 +28,8 @@ function create_service_request($task_id, $user_id){
     
 }//fu
     
-function create_provider_dd($my_array, $selected){
-        echo "<option value=''>SELECT</option>";
+function create_provider_dd($my_array, $selected, $default_text="SELECT"){
+        echo "<option value=''>".$default_text."</option>";
         for ($i=0; $i<count($my_array['provider']); $i++){
             echo "<option value='".$my_array['Profile_ID'][$i]."'";
             if ($my_array['Profile_ID'][$i]==$selected){ echo "SELECTED"; }
@@ -57,6 +57,7 @@ function get_users_task($username){
            $tasks[$x]['task_deadline']=$row['task_deadline'];
            $tasks[$x]['task_desc']=$row['task_desc'];
            $tasks[$x]['task_date']=$row['task_date'];
+           $tasks[$x]['task_status']=$row['task_status'];
            $tasks[$x]['service_desc']=$row['Service_DSC'];
            $tasks[$x]['name']=$row['name'];
           
