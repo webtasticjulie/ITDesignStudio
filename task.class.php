@@ -39,6 +39,38 @@ function create_provider_dd($my_array, $selected){
 
 }//fu
     
+function get_users_task($username){
+   $link = $this->connect_db();
+   $query = mysqli_prepare($link, "SELECT task_id, task_deadline, task_desc, task_date,  task_status, task_deadline, services.Service_DSC, profiles.name FROM profiles, tasks, services WHERE services.Service_ID = tasks.Service_ID AND tasks.assigned_to = profiles.Profile_ID AND profiles.ldap_login = ? ORDER BY task_deadline") or die("Error: ".mysqli_error($link));
+   mysqli_stmt_bind_param ($query, "s", $username);
+   mysqli_stmt_execute($query) or die("Error. Could not query the table.". mysqli_error($conn));
+   $result = mysqli_stmt_get_result($query);
+    
+    if (mysqli_num_rows($result)==0){
+      echo "You have no tasks assigned to you.";
+      exit;
+    }else{
+      $x=0;
+      while ($row = mysqli_fetch_array($result)){
+
+           $tasks[$x]['task_id']=$row['task_id'];
+           $tasks[$x]['task_deadline']=$row['task_deadline'];
+           $tasks[$x]['task_desc']=$row['task_desc'];
+           $tasks[$x]['task_date']=$row['task_date'];
+           $tasks[$x]['service_desc']=$row['Service_DSC'];
+           $tasks[$x]['name']=$row['name'];
+          
+          
+           $x++;
+       }
+
+
+
+       return $tasks;
+  }
+   
+}//fu
+    
 }// end of class
 
 ?>

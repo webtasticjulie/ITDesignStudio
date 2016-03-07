@@ -2,12 +2,12 @@
 
 <html>
 <head>
-  <title>Services</title>
+  <title>My Tasks</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" href="style.css">
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
 <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
@@ -15,34 +15,34 @@
 
 <body>
   <?php include('header.php');?>
-
   
 
   <div id="maincontent">
       <div id="titlebar">
-    <h3>Request Service</h3>
-    <hr>
-  </div>
-   <?php 
+    
+    <?php 
     include ('task.class.php');
     $task = new task;
-   if ($_POST){
-       //echo "Task Created";
-       $task->create_task($_POST['description']);
-       
-   }else{ //show the form
-   
-   ?>
-      <form name="openticket" method="post" action="open.php" data-transition="slide">
-          <label for="requestor">Requestor's name:<input type="text" name="requestor" id="requestor" placeholder="Name"/></label>
-          <label for="description">Description:<textarea name="description" id="description" placeholder="Please enter any information about this request."></textarea></label>
-          <input type="hidden" name="serviceprovider" value="<?php echo $_GET["id"];?>"/>
-          <input type="submit" name="createtask" value="Submit"/>
-    
-      
-      </form>
-    <?php } ?>
-           
+    $tasks = $task->get_users_task('crocheterjulie'); //change later to session username
+    // print_r($tasks);
+    echo "<h3>".$tasks[0]["name"]."'s Tasks</h3><hr/><br/>";
+    for ($i=0; $i< sizeof($tasks); $i++){
+        
+     //   echo $tasks["task_id"][$i]."<br/>"; 
+        
+        //echo $tasks[$i]["task_id"]."<br/>";
+        echo "Description:  ".$tasks[$i]["task_desc"]."<br/>";
+        echo "Created Date:  ".$tasks[$i]["task_date"]."<br/>";
+        echo "Deadline:  ".$tasks[$i]["task_deadline"]."<br/>";
+        echo "Service Requested:  ".$tasks[$i]["service_desc"];
+        echo "<div class='completebutton'><form name='completed'><input type='hidden' name='task_id' value='".$tasks[$i]["task_id"]."'><label for='complete'>Mark as Completed<input type='checkbox' data-mini='true' data-theme='c' name='complete' id='complete' value='Mark as Complete'/></label></form></div>";
+        echo "<hr/><br/><br/>";
+        
+        
+    }
+    ?>
   </div>
+  
+  
 </body>
 </html>

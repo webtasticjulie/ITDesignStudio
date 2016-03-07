@@ -29,7 +29,9 @@ header{
     width: 80%;
     height: 15%;
 }
-
+.completebutton{
+    width: 20%;
+}
 #logo{
   width: 30%;
 
