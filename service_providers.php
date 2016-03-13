@@ -40,7 +40,7 @@
           echo "<h5>Contact Information</h5><hr/><a href=\"mailto:".$providers['email'][$i]."\">".$providers['email'][$i]."</a><br/>";
            
           if (isset($_SESSION['username'])){
-              echo "logged in ".$_SESSION['username'];
+             // echo "logged in ".$_SESSION['username'];
          echo "<span style='width: 20%; float:right;'><a href='open.php?id=".$providers["Profile_ID"][$i]."' data-role=\"button\">Request Service</a></span>";
           }
            echo "<h5>Services</h5><hr/>";
