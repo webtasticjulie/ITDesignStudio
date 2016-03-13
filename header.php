@@ -2,7 +2,7 @@
  <h1>CCSE Community</h1>
   
 <img src="Technology-Wallpaper-6.jpg" id="logo" alt="Technology Services"> 
-   
+ <span style="float: right;"><a href="logout.php">Logout</a></span>  
   <div style="width: 20%; float: right; margin-right: 1em;"><form name="search" method="get" action="service_providers.php">
         
         <input type="search" name="filter" placeholder="search" id="search" value="">
