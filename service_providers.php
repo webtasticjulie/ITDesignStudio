@@ -1,3 +1,4 @@
+<?php session_start('tasks');?>
 <!DOCTYPE html>
 
 <html>
@@ -37,7 +38,11 @@
           echo "<div class=\"providerinfo\">";
           echo "<h4>".$providers['provider'][$i]."</h4>";
           echo "<h5>Contact Information</h5><hr/><a href=\"mailto:".$providers['email'][$i]."\">".$providers['email'][$i]."</a><br/>";
+           
+          if (isset($_SESSION['username'])){
+              echo "logged in ".$_SESSION['username'];
          echo "<span style='width: 20%; float:right;'><a href='open.php?id=".$providers["Profile_ID"][$i]."' data-role=\"button\">Request Service</a></span>";
+          }
            echo "<h5>Services</h5><hr/>";
           $offers = $service->get_service_providers($providers['Profile_ID'][$i]);
           if (sizeof($offers>0)){
