@@ -122,7 +122,7 @@ function check_exists($table, $field, $value){
 }
 //connects to database and returns link  
 function connect_db(){
-  //Removed Line from Code Insert Database Connection string here like so:    $link = new mysqli('localhost', 'user', 'password', 'databasename');
+    $link = new mysqli('localhost', 'my_user', 'my*password', 'abeck');
     if (!$link){
       echo "ERROR: Unable to connect to MySQL. ".PHP_EOL;
       echo "Debug".mysqli_connect_errno().PHP_EOL;
@@ -182,10 +182,14 @@ function add_provider(){
     $exists=$this->check_exists('profiles', 'Email', $_POST['email']);
     
     $name=$_POST['fname']." ".$_POST['lname'];
+    $fname=$_POST['fname'];
+    $lname=$_POST['lname'];
+    $email=$_POST['email'];
+    $username=$_POST['ksuid'];
     if ($exists == 0){  //if user doesn't already exist
         
-        $query = mysqli_prepare($link, "INSERT INTO profiles (name, Email, Availability,notifications) VALUES (?, ?, ?, ?)") or die("Error: ". mysqli_error($link));
-        mysqli_stmt_bind_param ($query, "ssss", $name, $_POST['email'], $_POST['availability'], $_POST['optin']);
+        $query = mysqli_prepare($link, "INSERT INTO profiles (name, Email, Availability,notifications, ldap_login) VALUES (?, ?, ?, ?,?)") or die("Error: ". mysqli_error($link));
+        mysqli_stmt_bind_param ($query, "sssss", $name, $_POST['email'], $_POST['availability'], $_POST['optin'], $_POST['ksuid']);
         mysqli_stmt_execute($query) or die("Error. Could not insert into the table.".mysqli_error($link));
         $user_id = $link->insert_id;
 
@@ -197,10 +201,86 @@ function add_provider(){
          if ($_POST['optin']=="on"){
             $this->sendConfirmation($name, $_POST['email']);
          }
+        //add user to ldap
+        $this->add_user_ldap($username, 'ResetMe', $fname, $lname, $email);
     
     }    
 }// end function
     
+function add_user_ldap($username, $password, $firstname, $lastname, $email){
+ //what entry we want to add
+//IF you execute this code more than once, you will get an
+//error message: add failed - record already exists
+//as a home assignment, you will add form that will collect
+//new record information from user and pass it to this //script for insertion 
+//$username = "speltsve";
+//$password = "abc123";
+//$firstname = "Svetlana";
+//$lastname = "Peltsverger ";
+//$email = "speltsve@spsu.edu";
+
+// connect to ldap server
+$ldapconn = ldap_connect("localhost") 
+or die("Could not connect to LDAP server.");
+
+// use OpenDJ version V3 protocol 
+if (ldap_set_option($ldapconn,LDAP_OPT_PROTOCOL_VERSION,3)){
+   //echo "<p>Using LDAP v3</p>";
+} // end if
+else {
+   echo "<p>Failed to set version to protocol 3</p>";
+} // end else
+
+//administrator credentials in order to add new entries
+$ldaprdn = "cn=manager,dc=designstudio1,dc=com";
+$ldappass = "my*password"; // associated password
+
+if ($ldapconn) {
+    // binding to ldap server
+    $ldapbind = ldap_bind($ldapconn, $ldaprdn, $ldappass);
+    
+    // verify binding
+   if ($ldapbind) {
+      //echo "<p>LDAP bind successful...</p>";
+      //create new record
+      $ldaprecord['givenName'] = $firstname;
+      $ldaprecord['sn'] = $lastname;
+      $ldaprecord['cn'] = $username;
+      $ldaprecord['objectclass'][0] = "top";
+      $ldaprecord['objectclass'][1] = "person";
+      $ldaprecord['objectclass'][2] = "inetOrgPerson";
+      $ldaprecord['userPassword'] = $password;
+      $ldaprecord['mail'] = $email;
+      //add new record
+      if (ldap_add($ldapconn, "cn=" . $username . 
+         ",dc=designstudio1,dc=com", $ldaprecord)){
+          $msg = "Thank you <b>" . $firstname . " " .
+             $lastname . "</b> for registering on our" . 
+                " website.";
+          //display thank you message on the website
+          echo $msg;
+          
+      } // end if
+      else {
+          echo "Error #: " . ldap_errno($ldapconn) . "<br />\n";
+          echo "Error: " . ldap_error($ldapconn) . "<br />\n";
+          echo("<p>Failed to register you! (add error)</p>");
+      }
+   } // end if
+   else {
+      echo("<p>Failed to register you! (bind error)</p>");
+   } // end else
+   //close ldap connection VERY IMPORTANT
+   ldap_close($ldapconn);
+} //end if
+else {
+     echo("<p>Failed to register you! (no ldap server) </p>");
+} //end else   
+    
+    
+    
+    
+}//fu
 function sendConfirmation($name, $email){
     $message= $name.", Thank you for registering with our site.  Your registration has been confirmed.";
     $subject="Registration Confirmation";

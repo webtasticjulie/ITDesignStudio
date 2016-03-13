@@ -1,3 +1,4 @@
+<?php session_start('tasks');?>
 <!DOCTYPE html>
 
 <html>
@@ -52,27 +53,32 @@
     <?php 
     include ('task.class.php');
     $task = new task;
-    $tasks = $task->get_users_task('crocheterjulie'); //change later to session username
-    // print_r($tasks);
-    echo "<h3>".$tasks[0]["name"]."'s Tasks</h3><hr/><br/>";
-    $providers = $task->get_providers('');
-    for ($i=0; $i< sizeof($tasks); $i++){
-        
-     //   echo $tasks["task_id"][$i]."<br/>"; 
-        
-        //echo $tasks[$i]["task_id"]."<br/>";
-        echo "Description:  ".$tasks[$i]["task_desc"]."<br/>";
-        echo "Created Date:  ".$tasks[$i]["task_date"]."<br/>";
-        echo "Deadline:  ".$tasks[$i]["task_deadline"]."<br/>";
-        echo "Service Requested:  ".$tasks[$i]["service_desc"]."<br/>";
-        echo "Status:".$tasks[$i]["task_status"]."<br/>";
-        echo "<div class='completebutton'><form name='completed'><input type='hidden' name='task_id' value='".$tasks[$i]["task_id"]."'><label for='complete'>Mark as Completed<input type='checkbox' data-mini='true' data-theme='c' name='complete' id='complete' value='Mark as Complete'/></label></form></div>";
-        echo "<div class='completebutton'><form name='transfer'><input type='hidden' name='task_id' value='".$tasks[$i]["task_id"]."'><select data-mini='true' data-theme='c' name='transfer' id='transfer' onChange='transfer();'>";
-        $task->create_provider_dd($providers, "", "Transfer To:");
-        echo "</select></label></form></div>";
-        echo "<hr/><br/><br/>";
-        
-        
+    if (isset($_SESSION['username'])){
+        $tasks = $task->get_users_task($_SESSION['username']); //change later to session username
+
+        // print_r($tasks);
+        echo "<h3>".$tasks[0]["name"]."'s Tasks</h3><hr/><br/>";
+        $providers = $task->get_providers('');
+        for ($i=0; $i< sizeof($tasks); $i++){
+
+         //   echo $tasks["task_id"][$i]."<br/>"; 
+
+            //echo $tasks[$i]["task_id"]."<br/>";
+            echo "Description:  ".$tasks[$i]["task_desc"]."<br/>";
+            echo "Created Date:  ".$tasks[$i]["task_date"]."<br/>";
+            echo "Deadline:  ".$tasks[$i]["task_deadline"]."<br/>";
+            echo "Service Requested:  ".$tasks[$i]["service_desc"]."<br/>";
+            echo "Status:".$tasks[$i]["task_status"]."<br/>";
+            echo "<div class='completebutton'><form name='completed'><input type='hidden' name='task_id' value='".$tasks[$i]["task_id"]."'><label for='complete'>Mark as Completed<input type='checkbox' data-mini='true' data-theme='c' name='complete' id='complete' value='Mark as Complete'/></label></form></div>";
+            echo "<div class='completebutton'><form name='transfer'><input type='hidden' name='task_id' value='".$tasks[$i]["task_id"]."'><select data-mini='true' data-theme='c' name='transfer' id='transfer' onChange='transfer();'>";
+            $task->create_provider_dd($providers, "", "Transfer To:");
+            echo "</select></label></form></div>";
+            echo "<hr/><br/><br/>";
+
+
+        }
+    }else{
+        echo "You must be logged in to see your tasks.";
     }
     ?>
   </div>
