@@ -43,7 +43,7 @@ function get_services_checkbox(){
    while ($row = mysqli_fetch_array($results)){
        echo "<label for='services'>".$row['Service_DSC']."<input name=\"services[]\" type=\"checkbox\" value=\"".$row['Service_ID']."\"></label>";
    }
-    
+    echo "<label for='servicesnotlisted'>Add Service not Listed<input name=\"services[]\" id=\"servicesnotlisted\" type=\"checkbox\" value=\"NotListed\"></label>";
    
 }
 
@@ -53,7 +53,7 @@ function get_service_providers($id){
    $sql = "SELECT DISTINCT profiles.name as name, Services.Service_DSC as Service_DSC, services_provided.Profile_ID as Profile_ID from profiles,    services_provided, Services where profiles.Profile_ID= services_provided.Profile_ID AND services_provided.Service_ID = Services. Service_ID";
    
    if (is_numeric($id)){
-      $sql.=" AND services_provided.Profile_ID = '".stripslashes($id)."' ";
+      $sql.=" AND services_provided.Profile_ID = '".addslashes($id)."' ";
    } 
    
   
@@ -71,7 +71,8 @@ function get_service_providers($id){
   
    
    return $services;
-}
+} //fu
+    
     
 //get providers that offer services
 function get_providers($id){
@@ -82,11 +83,11 @@ function get_providers($id){
       $sql.=" AND services_provided.Profile_ID = '".$id."' ";
   }
   if($_GET){
-  if (isset($_GET["filter"])){
-  if($_GET["filter"]!=""){
-       $sql.=" AND Services.Service_DSC LIKE '%".addslashes(urldecode($_GET["filter"]))."%' ";
-   }
-  }
+      if (isset($_GET["filter"])){
+          if($_GET["filter"]!=""){
+               $sql.=" AND Services.Service_DSC LIKE '%".addslashes(urldecode($_GET["filter"]))."%' ";
+          }
+      }
   }
   $providers = array();
   $x=0;
@@ -101,13 +102,12 @@ function get_providers($id){
            $providers['Profile_ID'][$x]=$row['Profile_ID'];
            $providers['email'][$x]=$row['email'];
            $x++;
-       }
-
-
-
+       }//end of while
        return $providers;
-  }
-}
+  } //end else
+}//fu
+    
+    
 function check_exists($table, $field, $value){
   $link = $this->connect_db();
   $sql= "SELECT * FROM ".$table." WHERE ".$field." = '".$value."'";
@@ -119,7 +119,9 @@ function check_exists($table, $field, $value){
   }else{
       return 0;
   }
-}
+}//fu
+    
+    
 //connects to database and returns link  
 function connect_db(){
     $link = new mysqli('localhost', 'my_user', 'my*password', 'abeck');
@@ -130,7 +132,8 @@ function connect_db(){
       exit;
   }
   return $link;
-}
+} //fu
+    
 
 //function inserts service provider into database
 function add_provider_service($user_id, $service_id){
@@ -142,7 +145,21 @@ function add_provider_service($user_id, $service_id){
    mysqli_stmt_close($query);  //for prepared 
 
     
-}
+}//fu
+    
+function add_service($service){
+   
+   $link = $this->connect_db();
+   $query = mysqli_prepare($link, "INSERT INTO services (Service_DSC) VALUES (?)") or die("Error: ".mysqli_error($link));
+   mysqli_stmt_bind_param ($query, "s", $service);
+   mysqli_stmt_execute($query) or die("Error. Could not insert into the table.". mysqli_error($conn));
+   mysqli_stmt_close($query);  //for prepared 
+   echo "Successfully added service";
+
+    
+}//fu
+    
+    
 //provide server side validation of form
 function validate_form(){
     $error = false; //set error to false for default
@@ -160,21 +177,22 @@ function validate_form(){
        }else{
            if (!is_array($value)){
                 if ($key!="Submit"){
-                echo $key." = ".$value."<br/>";
+                    echo $key." = ".$value."<br/>";
                 }
-           }
+           }//end if
            
-       }
+       }//end else
             
-    }
+    }//foreach
     //exit code if error present - do not continue to add user
     if ($error == true){
         echo "Please go back and supply all data.";
         echo "<a href=\"#\">Back</a>";
         exit;
-    }
-}
-
+    }//if
+}//fu
+    
+//add a provider to the database
 function add_provider(){
     $link = $this->connect_db();
     $this->validate_form();
@@ -219,16 +237,6 @@ function add_provider(){
 }// end function
     
 function add_user_ldap($username, $password, $firstname, $lastname, $email){
- //what entry we want to add
-//IF you execute this code more than once, you will get an
-//error message: add failed - record already exists
-//as a home assignment, you will add form that will collect
-//new record information from user and pass it to this //script for insertion 
-//$username = "speltsve";
-//$password = "abc123";
-//$firstname = "Svetlana";
-//$lastname = "Peltsverger ";
-//$email = "speltsve@spsu.edu";
 
 // connect to ldap server
 $ldapconn = ldap_connect("localhost") 
@@ -242,9 +250,7 @@ else {
    echo "<p>Failed to set version to protocol 3</p>";
 } // end else
 
-//administrator credentials in order to add new entries
-$ldaprdn = "cn=manager,dc=designstudio1,dc=com";
-$ldappass = "my*password"; // associated password
+require('secure/ldap.php');  //store login credentials in an external file not accessible via web
 
 if ($ldapconn) {
     // binding to ldap server
@@ -292,6 +298,8 @@ else {
     
     
 }//fu
+    
+//sends an email after registration
 function sendConfirmation($name, $email){
     $message= $name.", Thank you for registering with our site.  Your registration has been confirmed.";
     $subject="Registration Confirmation";

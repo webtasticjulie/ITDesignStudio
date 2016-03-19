@@ -11,6 +11,15 @@
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
 <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script type="text/javascript">
+ $(document).ready(function() {          
+       $('#servicesnotlisted').click(function() {
+        if (!$(this).is(':checked')) {
+            return confirm("Are you sure?");
+        }
+    
+      }    
+</script>
 </head>
 
 <body>
@@ -72,6 +81,11 @@
                     $service = new services();
                     $service->get_services_checkbox();
                  ?>
+                
+                
+                <div id="addservicediv" style="visibility: hidden;">
+                    Add service not listed:<input type="text" name="addservice"/>
+                </div>
                </td>
           </tr>
 
