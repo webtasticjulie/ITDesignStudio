@@ -171,17 +171,22 @@ function validate_form(){
     }
     foreach($_POST as $key=>$value){
        $$key=$value;
+        if ($key!="addservice"){
        if (($value=="") || is_null($value)){
            echo "Please supply a value for ".$key."<br/>";
            $error=true;
+           exit;
+       
        }else{
            if (!is_array($value)){
                 if ($key!="Submit"){
                     echo $key." = ".$value."<br/>";
                 }
            }//end if
-           
+         
        }//end else
+        }
+        
             
     }//foreach
     //exit code if error present - do not continue to add user
@@ -198,23 +203,24 @@ function add_provider(){
     $this->validate_form();
     //check if email account already exists
     $exists=$this->check_exists('profiles', 'Email', $_POST['email']);
-    if (strlen($_POST["fname"]<3)){
-        echo "Invalid Length Criteria on first name.";
-        exit;
-    }
-    if (strlen($_POST["lname"]<3)){
-        echo "Invalid Length Criteria on lastname.";
-        exit;
-    }
-     if (strlen($_POST["email"]<3)){
-        echo "Invalid Length Criteria on email.";
-        exit;
-    }
+    
     $name=$_POST['fname']." ".$_POST['lname'];
     $fname=$_POST['fname'];
     $lname=$_POST['lname'];
     $email=$_POST['email'];
     $username=$_POST['ksuid'];
+    if (strlen($fname)<3){
+        echo "Invalid Length Criteria on first name.";
+        
+    }
+    if (strlen($lname)<3){
+        echo "Invalid Length Criteria on lastname.";
+        exit;
+    }
+     if (strlen($email)<3){
+        echo "Invalid Length Criteria on email.";
+        exit;
+    }
     if ($exists == 0){  //if user doesn't already exist
         
         $query = mysqli_prepare($link, "INSERT INTO profiles (name, Email, Availability,notifications, ldap_login) VALUES (?, ?, ?, ?,?)") or die("Error: ". mysqli_error($link));
