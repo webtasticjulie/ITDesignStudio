@@ -70,7 +70,7 @@
             echo "Service Requested:  ".$tasks[$i]["service_desc"]."<br/>";
             echo "Status:".$tasks[$i]["task_status"]."<br/>";
             echo "<div class='completebutton'><form name='completed'><input type='hidden' name='task_id' value='".$tasks[$i]["task_id"]."'><label for='complete'>Mark as Completed<input type='checkbox' data-mini='true' data-theme='c' name='complete' id='complete' value='Mark as Complete'/></label></form></div>";
-            echo "<div class='completebutton'><form name='transfer'><input type='hidden' name='task_id' value='".$tasks[$i]["task_id"]."'><select data-mini='true' data-theme='c' name='transfer' id='transfer' onChange='transfer();'>";
+            echo "<div class='transferbutton'><form name='transfer'><input type='hidden' name='task_id' value='".$tasks[$i]["task_id"]."'><select data-mini='true' data-theme='c' name='transfer' id='transfer' onChange='transfer();'>";
             $task->create_provider_dd($providers, "", "Transfer To:");
             echo "</select></label></form></div>";
             echo "<hr/><br/><br/>";
