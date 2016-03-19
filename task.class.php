@@ -12,6 +12,39 @@ function create_task(&$description, $status="In Progress", &$duedate, &$service,
    mysqli_stmt_bind_param ($query, "sssss", $description, $status, $duedate, $service, $assigned);
    mysqli_stmt_execute($query) or die("Error. Could not insert into the table.". mysqli_error($conn));
     $task_id = $link->insert_id;
+    $user_id=$this->get_user_id();//hard coded for now until we get authentication piece in place
+    $this->create_service_request($task_id, $user_id);
+    mysqli_stmt_close($query);  //for prepared
+    
+}//fu
+    
+function get_user_id(){
+     $link = $this->connect_db();
+     $query = mysqli_prepare($link, "SELECT Profile_ID FROM profiles WHERE ldap_login=?") or die("Error: ".mysqli_error($link));
+     mysqli_stmt_bind_param ($query, "s", $_SESSION["username"]);
+     mysqli_stmt_execute($query) or die("Error. Could not query the table.". mysqli_error($conn));
+     $result = mysqli_stmt_get_result($query);
+    
+    if (mysqli_num_rows($result)==0){
+      echo "Error - No user on file.";
+      exit;
+    }else{
+      
+      while ($row = mysqli_fetch_array($result)){
+           return $row['Profile_ID'];
+          
+      }
+    }
+     
+}
+//update task assigned to
+function transfer_task($task_id, $transfer_to){
+   
+   $link = $this->connect_db();
+   $query = mysqli_prepare($link, "UPDATE tasks set assigned_to = ? WHERE task_id=?") or die("Error: ".mysqli_error($link));
+   mysqli_stmt_bind_param ($query, "ss", $transfer_to, $task_id);
+   mysqli_stmt_execute($query) or die("Error. Could not transfer task.". mysqli_error($conn));
+    $task_id = $link->insert_id;
     $user_id="4";//hard coded for now until we get authentication piece in place
     $this->create_service_request($task_id, $user_id);
     mysqli_stmt_close($query);  //for prepared
