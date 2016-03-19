@@ -71,7 +71,7 @@
           <tr>
             <td><label for="ksuid">KSU ID</label></td>
 
-            <td><input name="name" id="ksuid" size="30" placeholder="KSU ID"></td>
+            <td><input name="ksuid" id="ksuid" size="30" placeholder="KSU ID"></td>
           </tr>
 
           <tr>

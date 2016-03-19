@@ -1,3 +1,4 @@
+<?php SESSION_START();?>
 <!DOCTYPE html>
 
 <html>
@@ -44,7 +45,7 @@
       
    ?>
       <form name="openticket" method="post" action="open.php" data-transition="slide">
-          <label for="requestor">Requestor's KSU ID:<input type="text" name="requestor" id="requestor" placeholder="Name"/></label>
+          <label for="requestor">Requestor's KSU ID:<input type="text" name="requestor" id="requestor" placeholder="Name" value="<?php echo $_SESSION["username"];?>"/></label>
           <label for="description">Description:<textarea name="description" id="description" placeholder="Please enter any information about this request."></textarea></label>
           <input type="hidden" name="serviceprovider" value="<?php echo $_GET["id"];?>"/>
           <label for="providers">Provider:
