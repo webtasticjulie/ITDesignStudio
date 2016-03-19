@@ -180,7 +180,18 @@ function add_provider(){
     $this->validate_form();
     //check if email account already exists
     $exists=$this->check_exists('profiles', 'Email', $_POST['email']);
-    
+    if (strlen($_POST["fname"]<3)){
+        echo "Invalid Length Criteria on first name.";
+        exit;
+    }
+    if (strlen($_POST["lname"]<3)){
+        echo "Invalid Length Criteria on lastname.";
+        exit;
+    }
+     if (strlen($_POST["email"]<3)){
+        echo "Invalid Length Criteria on email.";
+        exit;
+    }
     $name=$_POST['fname']." ".$_POST['lname'];
     $fname=$_POST['fname'];
     $lname=$_POST['lname'];
