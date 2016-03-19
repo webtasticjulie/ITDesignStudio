@@ -20,6 +20,8 @@
           }
           
       });
+      
+     
     
   </script>
 </head>
@@ -43,7 +45,8 @@
         </form>
         <?php }else{
         echo "Welcome ".$_SESSION['username'];
-                }
+        echo "<br/><a href=\"mytasks.php\">My Tasks</a>";
+        }
                 ?>
         </span>
          <strong>Welcome! Looking for service providers? Need help with PHP? We have a community of individuals listed on our site offering services from PHP tutoring to HTML.  </strong>
