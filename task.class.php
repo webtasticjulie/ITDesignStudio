@@ -44,12 +44,23 @@ function transfer_task($task_id, $transfer_to){
    $query = mysqli_prepare($link, "UPDATE tasks set assigned_to = ? WHERE task_id=?") or die("Error: ".mysqli_error($link));
    mysqli_stmt_bind_param ($query, "ss", $transfer_to, $task_id);
    mysqli_stmt_execute($query) or die("Error. Could not transfer task.". mysqli_error($conn));
-    $task_id = $link->insert_id;
-    $user_id="4";//hard coded for now until we get authentication piece in place
-    $this->create_service_request($task_id, $user_id);
-    mysqli_stmt_close($query);  //for prepared
+   echo "The task has been transferred successfully.";
+    
     
 }//fu
+    
+//update status of a task
+function update_status($task_id){
+   
+   $link = $this->connect_db();
+   $query = mysqli_prepare($link, "UPDATE tasks set task_status= complete WHERE task_id=?") or die("Error: ".mysqli_error($link));
+   mysqli_stmt_bind_param ($query, "s", $task_id);
+   mysqli_stmt_execute($query) or die("Error. Could not transfer task.". mysqli_error($conn));
+   echo "The task status has been updated.";
+    
+    
+}//fu
+
 
 function create_service_request($task_id, $user_id){
    $link = $this->connect_db();
