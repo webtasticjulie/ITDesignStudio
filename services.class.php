@@ -34,7 +34,7 @@ function get_services_dd(){
 }
     
 //creates dynamic list of checkboxs for registration form
-function get_services_checkbox(){
+function get_services_checkbox($opt="Y"){
    $link = $this->connect_db();
    $sql = "SELECT Service_DSC, Service_ID FROM services";
    $results= mysqli_query($link, $sql);
@@ -43,7 +43,9 @@ function get_services_checkbox(){
    while ($row = mysqli_fetch_array($results)){
        echo "<label for='services'>".$row['Service_DSC']."<input name=\"services[]\" type=\"checkbox\" value=\"".$row['Service_ID']."\"></label>";
    }
+    if ($opt=="Y"){
     echo "<label for='servicesnotlisted'>Add Service not Listed<input name=\"services[]\" id=\"servicesnotlisted\" type=\"checkbox\" value=\"NotListed\"></label>";
+    }
    
 }
 
