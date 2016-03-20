@@ -226,7 +226,12 @@ function add_provider(){
     if ($exists == 0){  //if user doesn't already exist
         
         $query = mysqli_prepare($link, "INSERT INTO profiles (name, Email, Availability,notifications, ldap_login) VALUES (?, ?, ?, ?,?)") or die("Error: ". mysqli_error($link));
-        mysqli_stmt_bind_param ($query, "sssss", $name, $_POST['email'], $_POST['availability'], $_POST['optin'], $_POST['ksuid']);
+        if ((isset($_POST["optin"])) && ($_POST['optin']=="")){
+            $optin="OFF";
+        }else{
+            $optin="ON";
+        }
+        mysqli_stmt_bind_param ($query, "sssss", $name, $_POST['email'], $_POST['availability'], $optin, $_POST['ksuid']);
         mysqli_stmt_execute($query) or die("Error. Could not insert into the table.".mysqli_error($link));
         $user_id = $link->insert_id;
 
@@ -235,7 +240,7 @@ function add_provider(){
             $this->add_provider_service($user_id,$service_id);
         }
         //send confirmation email if opted in
-         if ($_POST['optin']=="on"){
+         if  (isset($_POST["optin"]) && ($_POST['optin']=="on")){
             $this->sendConfirmation($name, $_POST['email']);
          }
         //add user to ldap
