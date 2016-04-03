@@ -46,6 +46,7 @@
         <?php }else{
         echo "Welcome ".$_SESSION['username'];
         echo "<br/><a href=\"mytasks.php\">My Tasks</a>";
+        echo "<br/><a href=\"open.php\">Open a Request</a>";
         }
                 ?>
         </span>
