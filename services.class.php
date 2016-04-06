@@ -155,8 +155,11 @@ function add_service($service){
    $query = mysqli_prepare($link, "INSERT INTO services (Service_DSC) VALUES (?)") or die("Error: ".mysqli_error($link));
    mysqli_stmt_bind_param ($query, "s", $service);
    mysqli_stmt_execute($query) or die("Error. Could not insert into the table.". mysqli_error($conn));
-   mysqli_stmt_close($query);  //for prepared 
-   echo "Successfully added service";
+   $sid = $link->insert_id;
+
+   echo "Successfully added service".$sid;
+  
+   return $sid;
 
     
 }//fu
@@ -211,6 +214,8 @@ function add_provider(){
     $lname=$_POST['lname'];
     $email=$_POST['email'];
     $username=$_POST['ksuid'];
+    
+   
     if (strlen($fname)<3){
         echo "Invalid Length Criteria on first name.";
         
@@ -234,7 +239,15 @@ function add_provider(){
         mysqli_stmt_bind_param ($query, "sssss", $name, $_POST['email'], $_POST['availability'], $optin, $_POST['ksuid']);
         mysqli_stmt_execute($query) or die("Error. Could not insert into the table.".mysqli_error($link));
         $user_id = $link->insert_id;
-
+        
+        
+        //if adding a service not listed
+        if (isset($_POST['addservice'])){
+        $sid= $this->add_service($_POST["addservice"]);
+        
+         $this->add_provider_service($user_id,$sid);
+            
+        }   
         foreach($_POST['services'] as $service){
             $service_id=$service;
             $this->add_provider_service($user_id,$service_id);

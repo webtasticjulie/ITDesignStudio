@@ -13,12 +13,18 @@
 <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 <script type="text/javascript">
  $(document).ready(function() {          
-       $('#servicesnotlisted').click(function() {
-        if (!$(this).is(':checked')) {
-            return confirm("Are you sure?");
-        }
+       $('#servicesnotlisted').change(function () {
+           if (this.checked) {
+               $('#addservicediv').css("visibility", "visible");
+               
+           }else{
+                $('#addservicediv').css("visibility", "hidden");
+           }
+        });
+     
     
-      }    
+     
+ });
 </script>
 </head>
 
@@ -85,6 +91,7 @@
                 
                 <div id="addservicediv" style="visibility: hidden;">
                     Add service not listed:<input type="text" name="addservice"/>
+                    
                 </div>
                </td>
           </tr>
